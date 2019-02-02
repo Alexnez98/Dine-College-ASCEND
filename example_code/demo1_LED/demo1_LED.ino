@@ -33,7 +33,7 @@ void loop() {
    * This method can be also be empty if you do not need it.
    */
    digitalWrite(ledPIN, HIGH); // Turns the LED light on pin 13 on
-   delay(1000); // Keeps the LED light on for 1000 milliseconds (1 second)
+   delay(100); // Keeps the LED light on for 1000 milliseconds (1 second)
    digitalWrite(ledPIN, LOW); // Turns the LED on pin 13 off
    delay(1000); // Keeps the LED light off for 1000 milliseconds (1 second)
 
