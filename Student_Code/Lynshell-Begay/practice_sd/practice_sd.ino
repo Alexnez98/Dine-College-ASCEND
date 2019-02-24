@@ -2,8 +2,7 @@
  
 File myFile;
  
-void setup()
-{
+void setup(){
   Serial.begin(9600);
   Serial.print("Initializing SD card...");
   // On the Ethernet Shield, CS is pin 4. It's set as an output by default.

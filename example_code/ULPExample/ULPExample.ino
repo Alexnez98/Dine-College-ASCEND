@@ -32,6 +32,9 @@
 
 #include "Arduino.h"
 #include "ULP.h"
+#include <SD.h>
+
+File myFile;
 
 // These constants won't change.  They're used to give names to the pins used and to the sensitivity factors of the sensors:
 
@@ -60,54 +63,86 @@ NO2 sensor1(C1, T1, Sf1);	//Sensor Types are EtoH, H2S, CO, IAQ, SO2, NO2, RESP,
 
 
 void setup() {
-  Serial.flush();
+
+  // Serial.flush();
   Serial.begin(9600);    // initialize serial communications at 9600 bps:
 
-  Serial.println();
-  Serial.println("Setting Up");
-
-  Serial.print("Vsup for all sensors = ");
-  Serial.println(ULP::_Vsup);
-  Serial.print("Vcc for all sensors = ");
-  Serial.println(ULP::_Vcc);
-  Serial.print("Vref for sensor 1 = ");
-  Serial.println(sensor1._Vref);
+  Serial.print("Initializing SD card...");
+  // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+  // Note that even if it's not used as the CS pin, the hardware SS pin 
+  // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
+  // or the SD library functions will not work. 
+   pinMode(10, OUTPUT);
+ 
+  if (!SD.begin(10)) {
+    Serial.println("initialization failed!");
+    return;
+  }
   
-  // Using resistor values from board R1, R2, R3 are for setting _Vref and Bias, while R6 sets the gain
-  // If using modified or custom boards set Vref and Gain like this:
-  //    long int R1 = 61900, R2 = 1000, R3 = 1000000;
-  //    sensor1.setVref(R1, R2, R3);
-  //    sensor1._Gain = 49900; //resistor R6
-  // Vref is not necessary if zero() is called for each sensor. If you already know the sensor zero you can comment this out, and set the zero with zero1 = measured mV.
-  
-  Serial.print("Vzero = ");
-  Serial.println(Vzero1 = sensor1.zero());   //.zero() sets and returns the baseline voltage at current temperature with only clean air present
-  Serial.print("Tzero = ");
-  Serial.println(sensor1._Tz);
-  
-  //sensor1.setXSpan();                                //Must have previously zeroed in clean air, returns new span factor.
+  Serial.println("initialization done.");
+ 
+  // open the file. note that only one file can be open at a time,
+  // so you have to close this one before opening another.
+  myFile = SD.open("test.txt", FILE_WRITE);
+ 
+  // if the file opened okay, write to it:
+  if (myFile) {
+    Serial.print("Writing to test.txt...");
+    myFile.println("testing 1, 2, 3.");
 
-  //When calibrating the temperature use "LOW"/"HIGH" for the temperature range ie .setTSpan(40.2, "HIGH") where T is the current high temperature
-  sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
+    myFile.print("Vsup for all sensors = ");
+    myFile.println(ULP::_Vsup);
+    myFile.print("Vcc for all sensors = ");
+    myFile.println(ULP::_Vcc);
+    myFile.print("Vref for sensor 1 = ");
+    myFile.println(sensor1._Vref);
+  
+    // Using resistor values from board R1, R2, R3 are for setting _Vref and Bias, while R6 sets the gain
+    // If using modified or custom boards set Vref and Gain like this:
+    //    long int R1 = 61900, R2 = 1000, R3 = 1000000;
+    //    sensor1.setVref(R1, R2, R3);
+    //    sensor1._Gain = 49900; //resistor R6
+    // Vref is not necessary if zero() is called for each sensor. If you already know the sensor zero you can comment this out, and set the zero with zero1 = measured mV.
+  
+    myFile.print("Vzero = ");
+    myFile.println(Vzero1 = sensor1.zero());   //.zero() sets and returns the baseline voltage at current temperature with only clean air present
+    myFile.print("Tzero = ");
+    myFile.println(sensor1._Tz);
+  
+    //sensor1.setXSpan();                                //Must have previously zeroed in clean air, returns new span factor.
 
-  Serial.println("Finished Setting Up");
-  Serial.println("T1, mV1, C1");
+    //When calibrating the temperature use "LOW"/"HIGH" for the temperature range ie .setTSpan(40.2, "HIGH") where T is the current high temperature
+    sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
+
+    myFile.println("Finished Setting Up");
+    myFile.println("T1, mV1, C1");
+    
+    // close the file:
+    myFile.close();
+    Serial.println("done.");
+  } else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening test.txt");
+  }
 
 }
 
 void loop() {
+  myFile = SD.open("test.txt", FILE_WRITE);
+  
   temp1 = sensor1.getTemp(1, "F");  // Use .getTemp(n, "F") to get temp in Fahrenheit, with n as int number of seconds for averaging and "F" or "C" for temp units
     
-  Serial.print(temp1);
-  Serial.print(", ");
+  myFile.print(temp1);
+  myFile.print(", ");
 
   //Use .getVgas(int n) where n is the number of seconds to average
   //Use ._Vref to read the reference voltage (voltage offset)
-  Serial.print(sensor1.getVgas(1));
+  myFile.print(sensor1.getVgas(1));
 
   //Use .getConc(1, temp1) where temp1 is in deg C for temperature corrected span
-  Serial.print(", ");
-  Serial.println(sensor1.getConc(1,temp1));
+  myFile.print(", ");
+  myFile.println(sensor1.getConc(1,temp1));
+  myFile.close();
 
   delay(100);
 }
