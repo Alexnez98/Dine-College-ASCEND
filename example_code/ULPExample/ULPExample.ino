@@ -98,8 +98,13 @@ void setup() {
   // if the file opened okay, write to it:
   if (myFile) {
     Serial.print("Writing to TEST.TXT...");
-    myFile.println("testing 1, 2, 3.");
-
+    Serial.print("Vsup for all sensors = ");
+    Serial.println(ULP::_Vsup);
+    Serial.print("Vcc for all sensors = ");
+    Serial.println(ULP::_Vcc);
+    Serial.print("Vref for sensor 1 = ");
+    Serial.println(sensor1._Vref);
+    
     myFile.print("Vsup for all sensors = ");
     myFile.println(ULP::_Vsup);
     myFile.print("Vcc for all sensors = ");
@@ -113,7 +118,12 @@ void setup() {
     //    sensor1.setVref(R1, R2, R3);
     //    sensor1._Gain = 49900; //resistor R6
     // Vref is not necessary if zero() is called for each sensor. If you already know the sensor zero you can comment this out, and set the zero with zero1 = measured mV.
-  
+
+    Serial.print("Vzero = ");
+    Serial.println(Vzero1 = sensor1.zero());
+    Serial.print("Tzero = ");
+    Serial.println(sensor1._Tz);
+    
     myFile.print("Vzero = ");
     myFile.println(Vzero1 = sensor1.zero());   //.zero() sets and returns the baseline voltage at current temperature with only clean air present
     myFile.print("Tzero = ");
@@ -122,14 +132,14 @@ void setup() {
     //sensor1.setXSpan();                                //Must have previously zeroed in clean air, returns new span factor.
 
     //When calibrating the temperature use "LOW"/"HIGH" for the temperature range ie .setTSpan(40.2, "HIGH") where T is the current high temperature
-    //sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
+    sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
 
-    myFile.println("Finished Setting Up");
+    Serial.println("Finished Setting Up");
+    Serial.println("T1, mV1, C1");
     myFile.println("T1, mV1, C1");
     
     // close the file:
     myFile.close();
-    Serial.println("done.");
   } else {
     // if the file didn't open, print an error:
     Serial.println("error opening TEST.TXT");
@@ -141,23 +151,24 @@ void loop() {
   myFile = SD.open("TEST.TXT", FILE_WRITE);
   
   temp1 = sensor1.getTemp(1, "F");  // Use .getTemp(n, "F") to get temp in Fahrenheit, with n as int number of seconds for averaging and "F" or "C" for temp units
-    
-  myFile.print(temp1);
-  myFile.print(", ");
-
-  //Use .getVgas(int n) where n is the number of seconds to average
-  //Use ._Vref to read the reference voltage (voltage offset)
-  myFile.print(sensor1.getVgas(1));
-
-  //Use .getConc(1, temp1) where temp1 is in deg C for temperature corrected span
-  myFile.print(", ");
-  myFile.println(sensor1.getConc(1,temp1));
-  myFile.close();
 
   Serial.print(temp1);
   Serial.print(", ");
   Serial.print(sensor1.getVgas(1));
   Serial.print(", ");
   Serial.println(sensor1.getConc(1,temp1));
+  
+  myFile.print(temp1);
+  myFile.print(", ");
+  myFile.print(sensor1.getVgas(1));
+  myFile.print(", ");
+  myFile.println(sensor1.getConc(1,temp1));
+
+  //Use .getVgas(int n) where n is the number of seconds to average
+  //Use ._Vref to read the reference voltage (voltage offset)
+  //Use .getConc(1, temp1) where temp1 is in deg C for temperature corrected span
+    
+  myFile.close();
+
   delay(100);
 }
