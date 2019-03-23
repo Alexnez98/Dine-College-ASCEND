@@ -97,7 +97,7 @@ void setup() {
  
   // if the file opened okay, write to it:
   if (myFile) {
-    Serial.print("Writing to TEXT.TXT...");
+    Serial.print("Writing to TEST.TXT...");
     myFile.println("testing 1, 2, 3.");
 
     myFile.print("Vsup for all sensors = ");
@@ -122,7 +122,7 @@ void setup() {
     //sensor1.setXSpan();                                //Must have previously zeroed in clean air, returns new span factor.
 
     //When calibrating the temperature use "LOW"/"HIGH" for the temperature range ie .setTSpan(40.2, "HIGH") where T is the current high temperature
-    sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
+    //sensor1.setTSpan((71 - 32.0) * 5.0 / 9.0, "LOW");
 
     myFile.println("Finished Setting Up");
     myFile.println("T1, mV1, C1");
@@ -132,13 +132,13 @@ void setup() {
     Serial.println("done.");
   } else {
     // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
+    Serial.println("error opening TEST.TXT");
   }
 
 }
 
 void loop() {
-  myFile = SD.open("test.txt", FILE_WRITE);
+  myFile = SD.open("TEST.TXT", FILE_WRITE);
   
   temp1 = sensor1.getTemp(1, "F");  // Use .getTemp(n, "F") to get temp in Fahrenheit, with n as int number of seconds for averaging and "F" or "C" for temp units
     
