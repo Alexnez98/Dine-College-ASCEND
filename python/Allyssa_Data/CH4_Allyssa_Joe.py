@@ -37,26 +37,6 @@ plt.xlabel("Seconds", fontsize=fs)
 plt.ylabel("Concentration", fontsize=fs)
 plt.tick_params(axis='both', which='major', labelsize=fs-1)
 
-'''
-fig.add_subplot(3, 3, 2)
-clr = ['m']
-plt.plot(df['T1'], color = clr[0], linewidth=0.1, alpha=1.0)
-plt.xlabel("Time", fontsize=fs)
-plt.ylabel("Temperature, F", fontsize=fs)
-#plt.yscale('log')
-plt.tick_params(axis='both', which='major', labelsize=fs-1)
-
-
-fig.add_subplot(3, 3, 3)
-clr = ['c']
-plt.plot(df['C1'], color = clr[0], linewidth=0.1, alpha=1.0)
-plt.xlabel("Time", fontsize=fs)
-plt.ylabel("Temp. corrected\nconcentration", fontsize=fs)
-#plt.yscale('log')
-plt.tick_params(axis='both', which='major', labelsize=fs-1)
-'''
-
 plt.subplots_adjust(wspace=0.5, hspace=0.5)
 plt.savefig(mydir + '/figures/Fig5.png', dpi=400, bbox_inches = "tight")
 plt.close()
-#plt.show()
