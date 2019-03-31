@@ -12,8 +12,14 @@ Diné College of the Navajo Nation offers two- and four-year degrees in various 
 ## Current members:
 Dr. Kenneth (Ken) J. Locey, STEM faculty and ASCEND affiliate representative
 
-Lynshell Begay, College of STEM undergraduate. 2nd year participant in ASCEND
+Lynshell Begay, College of STEM undergraduate. 2nd year participant.
 
-Jamie Begay, College of STEM undergraduate. 2nd year participant in ASCEND
+Jamie Begay, College of STEM undergraduate. 2nd year participant.
 
-*Others to come*
+Allyssa W. Joe, College of STEM undergraduate. 1st year participant.
+
+Dennison John Jr., College of STEM undergraduate. 1st year participant.
+
+Peyton G. Nez, College of STEM undergraduate. 1st year participant.
+
+Samson J. Aiyemonisan, College of STEM undergraduate. 1st year participant.
